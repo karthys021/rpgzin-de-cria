@@ -13,118 +13,137 @@
             text-align: center;
         }
         .container {
-            max-width: 900px;
+            max-width: 1200px;
             margin: auto;
             background: #333;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0px 0px 15px rgba(224, 192, 151, 0.7);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0px 0px 25px rgba(224, 192, 151, 0.7);
         }
         h1, h2 {
             font-family: 'Old English Text MT', serif;
             color: #d4af37;
         }
         .section {
-            margin-top: 20px;
+            margin-top: 30px;
             background: #444;
-            padding: 15px;
-            border-radius: 8px;
-            box-shadow: 0px 0px 10px rgba(255, 215, 0, 0.3);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(255, 215, 0, 0.5);
         }
         label, button {
             display: block;
-            margin: 10px 0;
+            margin: 15px 0;
         }
-        input {
+        input, textarea {
             width: 100%;
-            padding: 8px;
+            padding: 12px;
             margin-top: 5px;
             background: #5a5a5a;
             color: #e0c097;
             border: none;
-            border-radius: 5px;
+            border-radius: 8px;
             font-size: 16px;
+        }
+        .image-upload input {
+            background: #666;
+            padding: 12px;
         }
         .weapon, .skills p {
             background: #555;
-            padding: 10px;
+            padding: 15px;
             border-radius: 8px;
-            margin: 5px;
+            margin: 10px;
             color: #d4af37;
             text-align: left;
+            font-size: 16px;
         }
         .weapons {
             display: flex;
             flex-wrap: wrap;
-            justify-content: center;
-            margin-top: 20px;
+            justify-content: space-around;
         }
         .weapon img {
-            width: 100px;
+            width: 120px;
             height: auto;
-            margin: 5px;
-            border-radius: 5px;
+            margin: 10px;
+            border-radius: 8px;
         }
         button {
             background: #d4af37;
             color: #1a1a1a;
-            padding: 10px;
+            padding: 15px;
             border: none;
-            border-radius: 5px;
+            border-radius: 8px;
             cursor: pointer;
             font-weight: bold;
-            margin-top: 15px;
+            font-size: 18px;
         }
         button:hover {
             background: #b8860b;
         }
-        .image-upload {
-            margin-top: 20px;
-        }
-        .skills-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            margin-top: 20px;
-        }
-        .skill-box {
-            width: 40%;
-            margin: 10px;
-            padding: 15px;
-            background-color: #666;
-            border-radius: 8px;
-        }
-        .skill-box input {
-            width: 100%;
-            padding: 10px;
-            background-color: #5a5a5a;
-            color: #e0c097;
-            font-size: 16px;
-        }
-        /* Dado */
         .dice {
-            width: 30px;
-            height: 30px;
+            width: 35px;
+            height: 35px;
             display: inline-block;
             background: url('https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Dice-20.svg/1024px-Dice-20.svg.png') no-repeat center center;
             background-size: contain;
             cursor: pointer;
             animation: dice-roll 0.5s ease-out;
+            margin-left: 10px;
         }
         @keyframes dice-roll {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+        .skills-container {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+        .skill-box {
+            width: 45%;
+            padding: 15px;
+            background-color: #666;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .skill-box input {
+            width: 100%;
+            padding: 12px;
+            background-color: #5a5a5a;
+            color: #e0c097;
+            font-size: 16px;
+        }
+        .image-preview {
+            margin-top: 20px;
+        }
+        .image-preview img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+        /* Mobile Responsiveness */
+        @media screen and (max-width: 768px) {
+            .container {
+                width: 100%;
+                padding: 15px;
+            }
+            .skills-container {
+                flex-direction: column;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Criação de Personagem</h1>
+        <h1>Criação de Personagem - RPG Automático</h1>
 
         <!-- Seção de Dados do Personagem -->
         <div class="section">
             <h2>Dados do Personagem</h2>
-            <label>Nome: <input type="text" id="nome"></label>
+            <label>Nome: <input type="text" id="nome" placeholder="Digite o nome do personagem"></label>
             <label>Força: <input type="number" id="forca" min="1" max="20"><span class="dice" onclick="rolarDado('forca')"></span></label>
             <label>Destreza: <input type="number" id="destreza" min="1" max="20"><span class="dice" onclick="rolarDado('destreza')"></span></label>
             <label>Inteligência: <input type="number" id="inteligencia" min="1" max="20"><span class="dice" onclick="rolarDado('inteligencia')"></span></label>
@@ -141,7 +160,9 @@
                 <label>Upload da Imagem do Personagem:</label>
                 <input type="file" id="imagem-personagem" accept="image/*" onchange="mostrarImagem()">
                 <br><br>
-                <img id="imagem-personagem-preview" src="" alt="Foto do Personagem" style="max-width: 100%; height: auto; display: none;">
+                <div class="image-preview">
+                    <img id="imagem-personagem-preview" src="" alt="Foto do Personagem" style="display: none;">
+                </div>
             </div>
             <label>Lore do Personagem: </label>
             <textarea id="lore" rows="4" placeholder="Digite a história do seu personagem..."></textarea>
@@ -149,7 +170,7 @@
 
         <!-- Seção de Inventário -->
         <div class="section">
-            <h2>Inventário</h2>
+            <h2>Inventário de Armas</h2>
             <div class="weapons">
                 <div class="weapon">
                     <img src="porrete.png" alt="Porrete">
@@ -189,59 +210,4 @@
                 <div class="weapon">
                     <img src="fal.png" alt="F.A.L">
                     <p>F.A.L</p>
-                    <p><strong>Dados:</strong> 2d20 + Destreza</p>
-                </div>
-                <div class="weapon">
-                    <img src="foices.png" alt="Foices da Lua">
-                    <p>Foices da Lua</p>
-                    <p><strong>Dados:</strong> 4d6 + Força</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Seção de Perícias -->
-        <div class="section">
-            <h2>Perícias</h2>
-            <div class="skills-container">
-                <div class="skill-box">
-                    <label for="parrudao">Parrudão: </label>
-                    <input type="number" id="parrudao" placeholder="Atribua seu valor">
-                    <p><strong>Descrição:</strong> Usa presença física para coagir, assustar ou persuadir.</p>
-                </div>
-                <div class="skill-box">
-                    <label for="courudo">Courudo: </label>
-                    <input type="number" id="courudo" placeholder="Atribua seu valor">
-                    <p><strong>Descrição:</strong> Mede a capacidade de suportar esforços prolongados.</p>
-                </div>
-                <div class="skill-box">
-                    <label for="bogue">Bógue: </label>
-                    <input type="number" id="bogue" placeholder="Atribua seu valor">
-                    <p><strong>Descrição:</strong> Habilidade para levantar grandes pesos e realizar feitos de força.</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        function rolarDado(atributo) {
-            let resultado = Math.floor(Math.random() * 20) + 1;
-            alert(`Dado rolado para ${atributo}: ${resultado}`);
-        }
-
-        function mostrarImagem() {
-            const imagem = document.getElementById("imagem-personagem").files[0];
-            const preview = document.getElementById("imagem-personagem-preview");
-            const reader = new FileReader();
-
-            reader.onloadend = function () {
-                preview.src = reader.result;
-                preview.style.display = "block";
-            };
-
-            if (imagem) {
-                reader.readAsDataURL(imagem);
-            }
-        }
-    </script>
-</body>
-</html>
+                    <p><strong>Dados:</strong> 
