@@ -5,220 +5,205 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RPG Automático</title>
     <style>
-        /* Geral */
         body {
-            font-family: 'Arial', sans-serif;
-            background-color: #121212;
+            font-family: 'Garamond', serif;
+            background-color: #2a2a2a;
             color: #e0c097;
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+            padding: 20px;
+            text-align: center;
         }
         .container {
-            max-width: 1200px;
+            max-width: 900px;
             margin: auto;
+            background: #333;
             padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 15px rgba(224, 192, 151, 0.7);
         }
         h1, h2 {
-            text-align: center;
+            font-family: 'Old English Text MT', serif;
             color: #d4af37;
         }
-        
-        /* Estilo do Formulário de Criação de Personagem */
-        .section {
-            background-color: #2a2a2a;
-            border-radius: 15px;
-            padding: 25px;
-            margin-bottom: 30px;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.7);
+        .character-form, .info {
+            background: #444;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            box-shadow: 0px 0px 10px rgba(255, 215, 0, 0.3);
         }
-        label {
-            font-weight: bold;
-            color: #d4af37;
+        label, button {
+            display: block;
+            margin: 10px 0;
         }
-        input, textarea {
+        input {
             width: 100%;
-            padding: 12px;
+            padding: 8px;
             margin-top: 5px;
-            background-color: #333;
+            background: #5a5a5a;
             color: #e0c097;
-            border: 1px solid #555;
-            border-radius: 10px;
+            border: none;
+            border-radius: 5px;
             font-size: 16px;
         }
-        input[type="file"] {
-            background-color: #444;
-            color: #e0c097;
-        }
-        .image-preview {
-            margin-top: 20px;
-        }
-        .image-preview img {
-            max-width: 100%;
-            height: auto;
+        .weapon, .skills p {
+            background: #555;
+            padding: 10px;
             border-radius: 8px;
+            margin: 5px;
+            color: #d4af37;
+            text-align: left;
         }
-
-        /* Armas e Inventário */
         .weapons {
             display: flex;
             flex-wrap: wrap;
-            justify-content: space-around;
-            gap: 20px;
-        }
-        .weapon {
-            background-color: #3a3a3a;
-            padding: 15px;
-            border-radius: 10px;
-            width: 220px;
-            text-align: center;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            margin-top: 20px;
         }
         .weapon img {
             width: 100px;
             height: auto;
-            margin-bottom: 10px;
         }
-        .weapon p {
-            font-size: 16px;
-            color: #d4af37;
-        }
-        
-        /* Animar o Dado */
-        .dice {
-            width: 35px;
-            height: 35px;
-            background: url('https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Dice-20.svg/1024px-Dice-20.svg.png') no-repeat center center;
-            background-size: contain;
-            display: inline-block;
+        button {
+            background: #d4af37;
+            color: #1a1a1a;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
             cursor: pointer;
-            margin-left: 10px;
-            animation: dice-roll 1s ease-in-out;
+            font-weight: bold;
+            margin-top: 15px;
         }
-        @keyframes dice-roll {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        button:hover {
+            background: #b8860b;
         }
-        
-        /* Responsividade */
-        @media screen and (max-width: 768px) {
-            .container {
-                padding: 10px;
-            }
-            .weapons {
-                flex-direction: column;
-                align-items: center;
-            }
-            .weapon {
-                width: 90%;
-                margin-bottom: 15px;
-            }
+        .image-upload {
+            margin-top: 20px;
+        }
+        .skills-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .skill-box {
+            width: 40%;
+            margin: 10px;
+            padding: 15px;
+            background-color: #666;
+            border-radius: 8px;
+        }
+        .skill-box input {
+            width: 100%;
+            padding: 10px;
+            background-color: #5a5a5a;
+            color: #e0c097;
+            font-size: 16px;
         }
     </style>
 </head>
 <body>
-
     <div class="container">
-        <h1>Criação de Personagem - RPG Automático</h1>
-
-        <!-- Seção de Dados do Personagem -->
-        <div class="section">
-            <h2>Dados do Personagem</h2>
-            <label for="nome">Nome: <input type="text" id="nome" placeholder="Digite o nome do personagem"></label>
-            <label for="forca">Força: <input type="number" id="forca" min="1" max="20"> <span class="dice" onclick="rolarDado('forca')"></span></label>
-            <label for="destreza">Destreza: <input type="number" id="destreza" min="1" max="20"> <span class="dice" onclick="rolarDado('destreza')"></span></label>
-            <label for="inteligencia">Inteligência: <input type="number" id="inteligencia" min="1" max="20"> <span class="dice" onclick="rolarDado('inteligencia')"></span></label>
-            <label for="carisma">Carisma: <input type="number" id="carisma" min="1" max="20"> <span class="dice" onclick="rolarDado('carisma')"></span></label>
-            <label for="couro">Couro (CA): <input type="number" id="couro" min="1" max="20"> <span class="dice" onclick="rolarDado('couro')"></span></label>
-            <label for="vida">Vida (1d100 + 100): <input type="number" id="vida" min="101" max="200"> <span class="dice" onclick="rolarDado('vida')"></span></label>
-            <label for="lombra">Lombra: <input type="number" id="lombra" min="0" max="99"> <span class="dice" onclick="rolarDado('lombra')"></span></label>
-        </div>
-
-        <!-- Seção de Foto e Lore -->
-        <div class="section">
-            <h2>Foto e Lore do Personagem</h2>
-            <div class="image-upload">
-                <label for="imagem-personagem">Upload da Imagem:</label>
-                <input type="file" id="imagem-personagem" accept="image/*" onchange="mostrarImagem()">
-            </div>
-            <div class="image-preview">
-                <img id="imagem-personagem-preview" src="" alt="Foto do Personagem" style="display: none;">
-            </div>
-            <label for="lore">Lore do Personagem:</label>
-            <textarea id="lore" rows="4" placeholder="Digite a história do seu personagem..."></textarea>
-        </div>
-
-        <!-- Seção de Inventário de Armas -->
-        <div class="section">
-            <h2>Inventário de Armas</h2>
-            <div class="weapons">
-                <div class="weapon">
-                    <img src="porrete.png" alt="Porrete">
-                    <p>Porrete de Aço Fundido</p>
-                    <p><strong>Dados:</strong> 4d8 + Força</p>
-                </div>
-                <div class="weapon">
-                    <img src="clava.png" alt="Clava">
-                    <p>Clava Espinhosa</p>
-                    <p><strong>Dados:</strong> 2d12 + Destreza</p>
-                </div>
-                <div class="weapon">
-                    <img src="machado.png" alt="Machado">
-                    <p>Machado de Bombeiro</p>
-                    <p><strong>Dados:</strong> 2d10 + Força</p>
-                </div>
-                <div class="weapon">
-                    <img src="bankai.png" alt="Espada Bankai">
-                    <p>Espada Bankai Longa</p>
-                    <p><strong>Dados:</strong> 3d8 + Destreza</p>
-                </div>
-                <div class="weapon">
-                    <img src="serralheria.png" alt="Soco de Serralheria">
-                    <p>Soco de Serralheria</p>
-                    <p><strong>Dados:</strong> 3d8 + Força</p>
-                </div>
-                <div class="weapon">
-                    <img src="rasga.png" alt="Espada Rasga-Mãe">
-                    <p>Espada Rasga-Mãe</p>
-                    <p><strong>Dados:</strong> 5d8 + Destreza</p>
-                </div>
-                <div class="weapon">
-                    <img src="arco.png" alt="Arco e Flecha">
-                    <p>Arco e Flecha</p>
-                    <p><strong>Dados:</strong> 4d9 + Destreza</p>
-                </div>
-                <div class="weapon">
-                    <img src="fal.png" alt="F.A.L">
-                    <p>F.A.L</p>
-                    <p><strong>Dados:</strong> 3d12 + Inteligência</p>
-                </div>
-            </div>
-        </div>
-
-    </div>
-
-    <!-- Scripts -->
-    <script>
-        function mostrarImagem() {
-            const input = document.getElementById('imagem-personagem');
-            const preview = document.getElementById('imagem-personagem-preview');
-            const file = input.files[0];
-            const reader = new FileReader();
+        <h1>Criação de Personagem</h1>
+        <div class="character-form">
+            <label>Nome: <input type="text" id="nome"></label>
+            <label>Força: <input type="number" id="forca" min="1" max="20"></label>
+            <label>Destreza: <input type="number" id="destreza" min="1" max="20"></label>
+            <label>Inteligência: <input type="number" id="inteligencia" min="1" max="20"></label>
+            <label>Carisma: <input type="number" id="carisma" min="1" max="20"></label>
+            <label>Couro (CA): <input type="number" id="couro" min="1" max="20"></label>
+            <label>Vida (1d100 + 100): <input type="number" id="vida" min="101" max="200"></label>
+            <label>Lombra: <input type="number" id="lombra" min="0" max="99"></label>
             
-            reader.onloadend = function() {
-                preview.src = reader.result;
-                preview.style.display = 'block';
-            }
-            if (file) {
-                reader.readAsDataURL(file);
-            }
-        }
+            <div class="image-upload">
+                <label>Upload da Imagem do Personagem:</label>
+                <input type="file" id="imagem-personagem" accept="image/*">
+            </div>
+            
+            <button onclick="criarPersonagem()">Criar Personagem</button>
+        </div>
 
-        function rolarDado(attribute) {
-            let roll = Math.floor(Math.random() * 20) + 1;
-            alert('Rolando o dado para ' + attribute + ': ' + roll);
-        }
-    </script>
+        <h2>Personagem Criado</h2>
+        <p id="personagem"></p>
 
-</body>
-</html>
+        <h2>Armas Disponíveis</h2>
+        <div class="weapons">
+            <div class="weapon">
+                <img src="porrete.png" alt="Porrete">
+                <p>Porrete de Aço Fundido</p>
+                <p><strong>Dados:</strong> 4d8 + Força</p>
+                <p><strong>Crítico:</strong> 18</p>
+            </div>
+            <div class="weapon">
+                <img src="clava.png" alt="Clava">
+                <p>Clava Espinhosa</p>
+                <p><strong>Dados:</strong> 2d12 + Destreza</p>
+                <p><strong>Bônus:</strong> 1d4 de dano de perfuração</p>
+                <p><strong>Crítico:</strong> 19</p>
+            </div>
+            <div class="weapon">
+                <img src="machado.png" alt="Machado">
+                <p>Machado de Bombeiro</p>
+                <p><strong>Dados:</strong> 2d10 + Força</p>
+                <p><strong>Crítico:</strong> 18</p>
+            </div>
+            <div class="weapon">
+                <img src="bankai.png" alt="Espada Bankai">
+                <p>Espada Bankai Longa</p>
+                <p><strong>Dados:</strong> 3d8 + Destreza</p>
+                <p><strong>Bônus:</strong> 3d6 de dano de corte, perfuração e infecção (somente com lâmina contaminada)</p>
+                <p><strong>Crítico:</strong> 18</p>
+            </div>
+            <div class="weapon">
+                <img src="serralheria.png" alt="Soco de Serralheria">
+                <p>Soco de Serralheria</p>
+                <p><strong>Dados:</strong> 3d8 + Força</p>
+                <p><strong>Bônus:</strong> 3d6 de dano de corte bruto + 1d4 de sangramento</p>
+                <p><strong>Crítico:</strong> 18</p>
+            </div>
+            <div class="weapon">
+                <img src="rasga.png" alt="Espada Rasga-Mãe">
+                <p>Espada Rasga-Mãe</p>
+                <p><strong>Dados:</strong> 5d8 + Destreza</p>
+                <p><strong>Bônus:</strong> 3d6 de dano de corte bruto + 2d4 de perfuração e sangramento</p>
+                <p><strong>Crítico:</strong> 18</p>
+            </div>
+            <div class="weapon">
+                <img src="arco.png" alt="Arco e Flecha">
+                <p>Arco e Flecha</p>
+                <p><strong>Dados:</strong> 4d9 + Destreza</p>
+                <p><strong>Bônus:</strong> Se tiver flecha personalizada, soma-se o dano da flecha mais o dano da arma. Caso contrário, ganha 1d6 de perfuração com flechas normais.</p>
+                <p><strong>Crítico:</strong> 17</p>
+            </div>
+            <div class="weapon">
+                <img src="fal.png" alt="F.A.L">
+                <p>F.A.L</p>
+                <p><strong>Dados:</strong> 2d20 + Destreza</p>
+                <p><strong>Bônus:</strong> 1d6 de perfuração (se usar baioneta)</p>
+                <p><strong>Baioneta Adaptada:</strong> 3d6 + Força</p>
+                <p><strong>Crítico:</strong> 19</p>
+            </div>
+            <div class="weapon">
+                <img src="foices.png" alt="Foices da Lua">
+                <p>Foices da Lua</p>
+                <p><strong>Dados:</strong> 4d6 + Força</p>
+                <p><strong>Bônus:</strong> 3d8 de dano de corte bruto + 1d4 de sangramento</p>
+                <p><strong>Crítico:</strong> 18</p>
+            </div>
+        </div>
+
+        <h2>Perícias</h2>
+        <div class="skills-container">
+            <div class="skill-box">
+                <label for="parrudao">Parrudão: </label>
+                <input type="number" id="parrudao" placeholder="Atribua seu valor">
+                <p><strong>Descrição:</strong> Usa presença física para coagir, assustar ou persuadir.</p>
+            </div>
+            <div class="skill-box">
+                <label for="courudo">Courudo: </label>
+                <input type="number" id="courudo" placeholder="Atribua seu valor">
+                <p><strong>Descrição:</strong> Mede a capacidade de suportar esforços prolongados.</p>
+            </div>
+            <div class="skill-box">
+                <label for="bogue">Bógue: </label>
+                <input type="number" id="bogue" placeholder="Atribua seu valor">
+                <p><strong>Descrição:</strong> Habilidade
