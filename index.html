@@ -7,7 +7,7 @@
     <style>
         body {
             font-family: 'Garamond', serif;
-            background-color: #1a1a1a;
+            background-color: #2a2a2a;
             color: #e0c097;
             padding: 20px;
             text-align: center;
@@ -15,20 +15,21 @@
         .container {
             max-width: 900px;
             margin: auto;
-            background: #2e2e2e;
+            background: #333;
             padding: 20px;
             border-radius: 10px;
-            box-shadow: 0px 0px 15px rgba(224, 192, 151, 0.5);
+            box-shadow: 0px 0px 15px rgba(224, 192, 151, 0.7);
         }
         h1, h2 {
             font-family: 'Old English Text MT', serif;
             color: #d4af37;
         }
-        .character-form, .info {
-            background: #3a3a3a;
+        .section {
+            margin-top: 20px;
+            background: #444;
             padding: 15px;
             border-radius: 8px;
-            margin-top: 20px;
+            box-shadow: 0px 0px 10px rgba(255, 215, 0, 0.3);
         }
         label, button {
             display: block;
@@ -42,23 +43,27 @@
             color: #e0c097;
             border: none;
             border-radius: 5px;
+            font-size: 16px;
+        }
+        .weapon, .skills p {
+            background: #555;
+            padding: 10px;
+            border-radius: 8px;
+            margin: 5px;
+            color: #d4af37;
+            text-align: left;
         }
         .weapons {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-        }
-        .weapon {
-            background: #444;
-            padding: 15px;
-            border-radius: 8px;
-            margin: 10px;
-            text-align: center;
-            width: 200px;
+            margin-top: 20px;
         }
         .weapon img {
             width: 100px;
             height: auto;
+            margin: 5px;
+            border-radius: 5px;
         }
         button {
             background: #d4af37;
@@ -68,6 +73,7 @@
             border-radius: 5px;
             cursor: pointer;
             font-weight: bold;
+            margin-top: 15px;
         }
         button:hover {
             background: #b8860b;
@@ -75,64 +81,167 @@
         .image-upload {
             margin-top: 20px;
         }
-        .skills {
+        .skills-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
             margin-top: 20px;
-            background: #3a3a3a;
+        }
+        .skill-box {
+            width: 40%;
+            margin: 10px;
             padding: 15px;
+            background-color: #666;
             border-radius: 8px;
         }
-        .skills input {
-            width: 50px;
-            text-align: center;
+        .skill-box input {
+            width: 100%;
+            padding: 10px;
+            background-color: #5a5a5a;
+            color: #e0c097;
             font-size: 16px;
+        }
+        /* Dado */
+        .dice {
+            width: 30px;
+            height: 30px;
+            display: inline-block;
+            background: url('https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Dice-20.svg/1024px-Dice-20.svg.png') no-repeat center center;
+            background-size: contain;
+            cursor: pointer;
+            animation: dice-roll 0.5s ease-out;
+        }
+        @keyframes dice-roll {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Criação de Personagem</h1>
-        <div class="character-form">
+
+        <!-- Seção de Dados do Personagem -->
+        <div class="section">
+            <h2>Dados do Personagem</h2>
             <label>Nome: <input type="text" id="nome"></label>
-            <label>Força: <input type="number" id="forca" min="1" max="20"></label>
-            <label>Destreza: <input type="number" id="destreza" min="1" max="20"></label>
-            <label>Inteligência: <input type="number" id="inteligencia" min="1" max="20"></label>
-            <label>Carisma: <input type="number" id="carisma" min="1" max="20"></label>
-            <label>Couro (CA): <input type="number" id="couro" min="1" max="20"></label>
-            <label>Vida: <input type="number" id="vida" min="101" max="200"></label>
-            <label>Lombra: <input type="number" id="lombra" min="0" max="99"></label>
-            
+            <label>Força: <input type="number" id="forca" min="1" max="20"><span class="dice" onclick="rolarDado('forca')"></span></label>
+            <label>Destreza: <input type="number" id="destreza" min="1" max="20"><span class="dice" onclick="rolarDado('destreza')"></span></label>
+            <label>Inteligência: <input type="number" id="inteligencia" min="1" max="20"><span class="dice" onclick="rolarDado('inteligencia')"></span></label>
+            <label>Carisma: <input type="number" id="carisma" min="1" max="20"><span class="dice" onclick="rolarDado('carisma')"></span></label>
+            <label>Couro (CA): <input type="number" id="couro" min="1" max="20"><span class="dice" onclick="rolarDado('couro')"></span></label>
+            <label>Vida (1d100 + 100): <input type="number" id="vida" min="101" max="200"><span class="dice" onclick="rolarDado('vida')"></span></label>
+            <label>Lombra: <input type="number" id="lombra" min="0" max="99"><span class="dice" onclick="rolarDado('lombra')"></span></label>
+        </div>
+
+        <!-- Seção de Foto e Lore -->
+        <div class="section">
+            <h2>Foto do Personagem e Lore</h2>
             <div class="image-upload">
                 <label>Upload da Imagem do Personagem:</label>
-                <input type="file" id="imagem-personagem" accept="image/*">
+                <input type="file" id="imagem-personagem" accept="image/*" onchange="mostrarImagem()">
+                <br><br>
+                <img id="imagem-personagem-preview" src="" alt="Foto do Personagem" style="max-width: 100%; height: auto; display: none;">
             </div>
-            
-            <button onclick="criarPersonagem()">Criar Personagem</button>
+            <label>Lore do Personagem: </label>
+            <textarea id="lore" rows="4" placeholder="Digite a história do seu personagem..."></textarea>
         </div>
-        <h2>Armas Disponíveis</h2>
-        <div class="weapons">
-            <div class="weapon"><img src="porrete.png" alt="Porrete"><p>Porrete de Aço Fundido</p></div>
-            <div class="weapon"><img src="clava.png" alt="Clava"><p>Clava Espinhosa</p></div>
-            <div class="weapon"><img src="machado.png" alt="Machado"><p>Machado de Bombeiro</p></div>
-            <div class="weapon"><img src="bankai.png" alt="Espada Bankai"><p>Espada Bankai Longa</p></div>
+
+        <!-- Seção de Inventário -->
+        <div class="section">
+            <h2>Inventário</h2>
+            <div class="weapons">
+                <div class="weapon">
+                    <img src="porrete.png" alt="Porrete">
+                    <p>Porrete de Aço Fundido</p>
+                    <p><strong>Dados:</strong> 4d8 + Força</p>
+                </div>
+                <div class="weapon">
+                    <img src="clava.png" alt="Clava">
+                    <p>Clava Espinhosa</p>
+                    <p><strong>Dados:</strong> 2d12 + Destreza</p>
+                </div>
+                <div class="weapon">
+                    <img src="machado.png" alt="Machado">
+                    <p>Machado de Bombeiro</p>
+                    <p><strong>Dados:</strong> 2d10 + Força</p>
+                </div>
+                <div class="weapon">
+                    <img src="bankai.png" alt="Espada Bankai">
+                    <p>Espada Bankai Longa</p>
+                    <p><strong>Dados:</strong> 3d8 + Destreza</p>
+                </div>
+                <div class="weapon">
+                    <img src="serralheria.png" alt="Soco de Serralheria">
+                    <p>Soco de Serralheria</p>
+                    <p><strong>Dados:</strong> 3d8 + Força</p>
+                </div>
+                <div class="weapon">
+                    <img src="rasga.png" alt="Espada Rasga-Mãe">
+                    <p>Espada Rasga-Mãe</p>
+                    <p><strong>Dados:</strong> 5d8 + Destreza</p>
+                </div>
+                <div class="weapon">
+                    <img src="arco.png" alt="Arco e Flecha">
+                    <p>Arco e Flecha</p>
+                    <p><strong>Dados:</strong> 4d9 + Destreza</p>
+                </div>
+                <div class="weapon">
+                    <img src="fal.png" alt="F.A.L">
+                    <p>F.A.L</p>
+                    <p><strong>Dados:</strong> 2d20 + Destreza</p>
+                </div>
+                <div class="weapon">
+                    <img src="foices.png" alt="Foices da Lua">
+                    <p>Foices da Lua</p>
+                    <p><strong>Dados:</strong> 4d6 + Força</p>
+                </div>
+            </div>
         </div>
-        <h2>Perícias</h2>
-        <div class="skills">
-            <label>Parrudão: <input type="number" id="parrudao" min="0" max="20"></label>
-            <label>Courudo: <input type="number" id="courudo" min="0" max="20"></label>
-            <label>Bógue: <input type="number" id="bogue" min="0" max="20"></label>
-            <label>Capela: <input type="number" id="capela" min="0" max="20"></label>
-            <label>Tisconde: <input type="number" id="tisconde" min="0" max="20"></label>
-            <label>Robalris: <input type="number" id="robalris" min="0" max="20"></label>
-            <label>Indagar: <input type="number" id="indagar" min="0" max="20"></label>
-            <label>Atinar: <input type="number" id="atinar" min="0" max="20"></label>
-            <label>Mexiricar: <input type="number" id="mexiricar" min="0" max="20"></label>
-            <label>Curar: <input type="number" id="curar" min="0" max="20"></label>
-            <label>Macumba: <input type="number" id="macumba" min="0" max="20"></label>
-            <label>Disdobro: <input type="number" id="disdobro" min="0" max="20"></label>
-            <label>Diplomacia: <input type="number" id="diplomacia" min="0" max="20"></label>
-            <label>Nó Cego: <input type="number" id="nocego" min="0" max="20"></label>
-            <label>Botar Pânico: <input type="number" id="botarpanico" min="0" max="20"></label>
+
+        <!-- Seção de Perícias -->
+        <div class="section">
+            <h2>Perícias</h2>
+            <div class="skills-container">
+                <div class="skill-box">
+                    <label for="parrudao">Parrudão: </label>
+                    <input type="number" id="parrudao" placeholder="Atribua seu valor">
+                    <p><strong>Descrição:</strong> Usa presença física para coagir, assustar ou persuadir.</p>
+                </div>
+                <div class="skill-box">
+                    <label for="courudo">Courudo: </label>
+                    <input type="number" id="courudo" placeholder="Atribua seu valor">
+                    <p><strong>Descrição:</strong> Mede a capacidade de suportar esforços prolongados.</p>
+                </div>
+                <div class="skill-box">
+                    <label for="bogue">Bógue: </label>
+                    <input type="number" id="bogue" placeholder="Atribua seu valor">
+                    <p><strong>Descrição:</strong> Habilidade para levantar grandes pesos e realizar feitos de força.</p>
+                </div>
+            </div>
         </div>
     </div>
+
+    <script>
+        function rolarDado(atributo) {
+            let resultado = Math.floor(Math.random() * 20) + 1;
+            alert(`Dado rolado para ${atributo}: ${resultado}`);
+        }
+
+        function mostrarImagem() {
+            const imagem = document.getElementById("imagem-personagem").files[0];
+            const preview = document.getElementById("imagem-personagem-preview");
+            const reader = new FileReader();
+
+            reader.onloadend = function () {
+                preview.src = reader.result;
+                preview.style.display = "block";
+            };
+
+            if (imagem) {
+                reader.readAsDataURL(imagem);
+            }
+        }
+    </script>
 </body>
 </html>
