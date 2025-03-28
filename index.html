@@ -1,213 +1,97 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RPG Automático</title>
+    <!-- ... (mantenha o head original) ... -->
     <style>
-        body {
-            font-family: 'Garamond', serif;
-            background-color: #2a2a2a;
-            color: #e0c097;
-            padding: 20px;
-            text-align: center;
+        /* Adicione estas novas regras CSS */
+        .dice:hover {
+            transform: scale(1.1);
+            transition: transform 0.3s;
         }
-        .container {
-            max-width: 1200px;
-            margin: auto;
-            background: #333;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0px 0px 25px rgba(224, 192, 151, 0.7);
+        #imagem-personagem-preview {
+            border: 3px solid #d4af37;
+            max-height: 300px;
+            margin-top: 10px;
         }
-        h1, h2 {
-            font-family: 'Old English Text MT', serif;
-            color: #d4af37;
-        }
-        .section {
-            margin-top: 30px;
-            background: #444;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(255, 215, 0, 0.5);
-        }
-        label, button {
-            display: block;
-            margin: 15px 0;
-        }
-        input, textarea {
-            width: 100%;
-            padding: 12px;
-            margin-top: 5px;
-            background: #5a5a5a;
-            color: #e0c097;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-        }
-        .image-upload input {
-            background: #666;
-            padding: 12px;
-        }
-        .weapon, .skills p {
-            background: #555;
-            padding: 15px;
-            border-radius: 8px;
-            margin: 10px;
-            color: #d4af37;
-            text-align: left;
-            font-size: 16px;
-        }
-        .weapons {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-around;
-        }
-        .weapon img {
-            width: 120px;
-            height: auto;
-            margin: 10px;
-            border-radius: 8px;
-        }
-        button {
-            background: #d4af37;
-            color: #1a1a1a;
-            padding: 15px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 18px;
-        }
-        button:hover {
-            background: #b8860b;
-        }
-        .dice {
-            width: 35px;
-            height: 35px;
-            display: inline-block;
-            background: url('https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Dice-20.svg/1024px-Dice-20.svg.png') no-repeat center center;
-            background-size: contain;
-            cursor: pointer;
-            animation: dice-roll 0.5s ease-out;
-            margin-left: 10px;
-        }
-        @keyframes dice-roll {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        .skills-container {
-            display: flex;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            margin-top: 30px;
-        }
-        .skill-box {
-            width: 45%;
-            padding: 15px;
-            background-color: #666;
-            border-radius: 8px;
-            margin-bottom: 20px;
-        }
-        .skill-box input {
-            width: 100%;
-            padding: 12px;
-            background-color: #5a5a5a;
-            color: #e0c097;
-            font-size: 16px;
-        }
-        .image-preview {
-            margin-top: 20px;
-        }
-        .image-preview img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 8px;
-        }
-        /* Mobile Responsiveness */
-        @media screen and (max-width: 768px) {
-            .container {
+        @media (max-width: 600px) {
+            .weapon {
+                width: 45%;
+            }
+            .skill-box {
                 width: 100%;
-                padding: 15px;
             }
-            .skills-container {
-                flex-direction: column;
-            }
+        }
+        .dice-result {
+            color: #b8860b;
+            font-weight: bold;
+            margin-left: 10px;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Criação de Personagem - RPG Automático</h1>
+    <!-- ... (mantenha o container e seções originais) ... -->
 
-        <!-- Seção de Dados do Personagem -->
-        <div class="section">
-            <h2>Dados do Personagem</h2>
-            <label>Nome: <input type="text" id="nome" placeholder="Digite o nome do personagem"></label>
-            <label>Força: <input type="number" id="forca" min="1" max="20"><span class="dice" onclick="rolarDado('forca')"></span></label>
-            <label>Destreza: <input type="number" id="destreza" min="1" max="20"><span class="dice" onclick="rolarDado('destreza')"></span></label>
-            <label>Inteligência: <input type="number" id="inteligencia" min="1" max="20"><span class="dice" onclick="rolarDado('inteligencia')"></span></label>
-            <label>Carisma: <input type="number" id="carisma" min="1" max="20"><span class="dice" onclick="rolarDado('carisma')"></span></label>
-            <label>Couro (CA): <input type="number" id="couro" min="1" max="20"><span class="dice" onclick="rolarDado('couro')"></span></label>
-            <label>Vida (1d100 + 100): <input type="number" id="vida" min="101" max="200"><span class="dice" onclick="rolarDado('vida')"></span></label>
-            <label>Lombra: <input type="number" id="lombra" min="0" max="99"><span class="dice" onclick="rolarDado('lombra')"></span></label>
-        </div>
+    <!-- Adicione este novo botão antes do fechamento do container -->
+    <button onclick="salvarPersonagem()">Salvar Personagem</button>
 
-        <!-- Seção de Foto e Lore -->
-        <div class="section">
-            <h2>Foto do Personagem e Lore</h2>
-            <div class="image-upload">
-                <label>Upload da Imagem do Personagem:</label>
-                <input type="file" id="imagem-personagem" accept="image/*" onchange="mostrarImagem()">
-                <br><br>
-                <div class="image-preview">
-                    <img id="imagem-personagem-preview" src="" alt="Foto do Personagem" style="display: none;">
-                </div>
-            </div>
-            <label>Lore do Personagem: </label>
-            <textarea id="lore" rows="4" placeholder="Digite a história do seu personagem..."></textarea>
-        </div>
+    <script>
+        // Função de rolagem de dados melhorada
+        function rolarDado(atributo) {
+            let resultado;
+            const diceElement = document.querySelector(`#${atributo} + .dice`);
+            
+            if(atributo === 'vida') {
+                resultado = Math.floor(Math.random() * 100) + 101; // 1d100 + 100
+            } else if(atributo === 'lombra') {
+                resultado = Math.floor(Math.random() * 100);
+            } else {
+                resultado = Math.floor(Math.random() * 20) + 1;
+            }
 
-        <!-- Seção de Inventário -->
-        <div class="section">
-            <h2>Inventário de Armas</h2>
-            <div class="weapons">
-                <div class="weapon">
-                    <img src="porrete.png" alt="Porrete">
-                    <p>Porrete de Aço Fundido</p>
-                    <p><strong>Dados:</strong> 4d8 + Força</p>
-                </div>
-                <div class="weapon">
-                    <img src="clava.png" alt="Clava">
-                    <p>Clava Espinhosa</p>
-                    <p><strong>Dados:</strong> 2d12 + Destreza</p>
-                </div>
-                <div class="weapon">
-                    <img src="machado.png" alt="Machado">
-                    <p>Machado de Bombeiro</p>
-                    <p><strong>Dados:</strong> 2d10 + Força</p>
-                </div>
-                <div class="weapon">
-                    <img src="bankai.png" alt="Espada Bankai">
-                    <p>Espada Bankai Longa</p>
-                    <p><strong>Dados:</strong> 3d8 + Destreza</p>
-                </div>
-                <div class="weapon">
-                    <img src="serralheria.png" alt="Soco de Serralheria">
-                    <p>Soco de Serralheria</p>
-                    <p><strong>Dados:</strong> 3d8 + Força</p>
-                </div>
-                <div class="weapon">
-                    <img src="rasga.png" alt="Espada Rasga-Mãe">
-                    <p>Espada Rasga-Mãe</p>
-                    <p><strong>Dados:</strong> 5d8 + Destreza</p>
-                </div>
-                <div class="weapon">
-                    <img src="arco.png" alt="Arco e Flecha">
-                    <p>Arco e Flecha</p>
-                    <p><strong>Dados:</strong> 4d9 + Destreza</p>
-                </div>
-                <div class="weapon">
-                    <img src="fal.png" alt="F.A.L">
-                    <p>F.A.L</p>
-                    <p><strong>Dados:</strong> 
+            // Atualiza o campo correspondente
+            document.getElementById(atributo).value = resultado;
+            
+            // Efeito visual no dado
+            diceElement.style.animation = 'none';
+            void diceElement.offsetWidth; // Trigger reflow
+            diceElement.style.animation = 'dice-roll 0.5s ease-out';
+            
+            // Exibe resultado temporário
+            const resultSpan = document.createElement('span');
+            resultSpan.className = 'dice-result';
+            resultSpan.textContent = resultado;
+            diceElement.parentNode.insertBefore(resultSpan, diceElement.nextSibling);
+            
+            setTimeout(() => resultSpan.remove(), 2000);
+        }
+
+        // Função para salvar o personagem
+        function salvarPersonagem() {
+            const personagem = {
+                nome: document.getElementById('nome').value,
+                atributos: {
+                    forca: document.getElementById('forca').value,
+                    destreza: document.getElementById('destreza').value,
+                    inteligencia: document.getElementById('inteligencia').value,
+                    carisma: document.getElementById('carisma').value,
+                    couro: document.getElementById('couro').value,
+                    vida: document.getElementById('vida').value,
+                    lombra: document.getElementById('lombra').value
+                },
+                pericias: {
+                    parrudao: document.getElementById('parrudao').value,
+                    courudo: document.getElementById('courudo').value,
+                    bogue: document.getElementById('bogue').value
+                },
+                lore: document.getElementById('lore').value,
+                imagem: document.getElementById('imagem-personagem-preview').src
+            };
+
+            console.log('Personagem Salvo:', personagem);
+            alert('Personagem salvo com sucesso! Verifique o console para os dados.');
+        }
+
+        // ... (mantenha a função mostrarImagem original) ...
+    </script>
+</body>
+</html>
