@@ -1,157 +1,138 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PNJ BR RPG - Offline</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>RPG Automático</title>
     <style>
-        body { background: #1a1a1a; color: white; }
-        .card-rpg { background: #2d2d2d; border-radius: 10px; padding: 20px; margin: 15px 0; }
-        .dice-result { background: #4a4a4a; padding: 10px; border-radius: 5px; margin: 10px 0; }
-        .lombra-bar { height: 20px; background: #333; border-radius: 10px; overflow: hidden; }
-        .lombra-fill { height: 100%; background: #6a1b9a; transition: width 0.3s; }
+        body {
+            font-family: 'Garamond', serif;
+            background-color: #1a1a1a;
+            color: #e0c097;
+            padding: 20px;
+            text-align: center;
+        }
+        .container {
+            max-width: 900px;
+            margin: auto;
+            background: #2e2e2e;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 15px rgba(224, 192, 151, 0.5);
+        }
+        h1, h2 {
+            font-family: 'Old English Text MT', serif;
+            color: #d4af37;
+        }
+        .character-form, .info {
+            background: #3a3a3a;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        label, button {
+            display: block;
+            margin: 10px 0;
+        }
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            background: #5a5a5a;
+            color: #e0c097;
+            border: none;
+            border-radius: 5px;
+        }
+        .weapons {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .weapon {
+            background: #444;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px;
+            text-align: center;
+            width: 200px;
+        }
+        .weapon img {
+            width: 100px;
+            height: auto;
+        }
+        button {
+            background: #d4af37;
+            color: #1a1a1a;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        button:hover {
+            background: #b8860b;
+        }
+        .image-upload {
+            margin-top: 20px;
+        }
+        .skills {
+            margin-top: 20px;
+            background: #3a3a3a;
+            padding: 15px;
+            border-radius: 8px;
+        }
+        .skills input {
+            width: 50px;
+            text-align: center;
+            font-size: 16px;
+        }
     </style>
 </head>
-<body class="container-fluid">
-    <!-- Cabeçalho -->
-    <h1 class="text-center my-4">⚔️ PNJ BR RPG</h1>
-
-    <!-- Criação de Personagem -->
-    <div class="card-rpg">
-        <h2>Criar Personagem</h2>
-        <input type="text" id="nome" class="form-control mb-2" placeholder="Nome do Personagem">
-        
-        <!-- Atributos -->
-        <div class="row mb-3">
-            <div class="col"><input type="number" id="forca" class="form-control" placeholder="Força" min="1" max="20" value="10"></div>
-            <div class="col"><input type="number" id="destreza" class="form-control" placeholder="Destreza" min="1" max="20" value="10"></div>
-            <div class="col"><input type="number" id="inteligencia" class="form-control" placeholder="Inteligência" min="1" max="20" value="10"></div>
-            <div class="col"><input type="number" id="carisma" class="form-control" placeholder="Carisma" min="1" max="20" value="10"></div>
-            <div class="col"><input type="number" id="couro" class="form-control" placeholder="Couro" min="1" max="20" value="10"></div>
-        </div>
-
-        <!-- Sistema Lombra -->
-        <div class="mb-3">
-            <h4>Lombra: <span id="lombraAtual">100</span>/100</h4>
-            <input type="range" id="lombraInput" class="form-range" min="0" max="99" value="0">
-            <button onclick="usarLombra()" class="btn btn-purple mb-2">Usar Lombra</button>
-            <div class="lombra-bar"><div class="lombra-fill" id="lombraBarra"></div></div>
-        </div>
-
-        <button onclick="salvarPersonagem()" class="btn btn-success">Salvar Personagem</button>
-    </div>
-
-    <!-- Armamentos -->
-    <div class="card-rpg">
-        <h3>Armas</h3>
-        <div class="row" id="armas"></div>
-    </div>
-
-    <!-- Histórico de Rolagens -->
-    <div class="card-rpg">
-        <h3>Últimas Rolagens</h3>
-        <div id="rolagens"></div>
-    </div>
-
-<script>
-// Dados do Sistema
-const armas = [
-    { nome: "PORRETE DE AÇO FUNDIDO", dano: "4d8", atributo: "forca", critico: 18 },
-    { nome: "ARCO E FLECHA", dano: "4d9", atributo: "destreza", critico: 17 }
-];
-
-// Sistema de Salvamento
-let personagem = JSON.parse(localStorage.getItem('pnjbr-personagem')) || {};
-
-function salvarPersonagem() {
-    personagem = {
-        nome: document.getElementById('nome').value,
-        atributos: {
-            forca: parseInt(document.getElementById('forca').value),
-            destreza: parseInt(document.getElementById('destreza').value),
-            inteligencia: parseInt(document.getElementById('inteligencia').value),
-            carisma: parseInt(document.getElementById('carisma').value),
-            couro: parseInt(document.getElementById('couro').value)
-        },
-        lombra: 100
-    };
-    
-    localStorage.setItem('pnjbr-personagem', JSON.stringify(personagem));
-    atualizarInterface();
-    alert("Personagem salvo localmente!");
-}
-
-// Sistema Lombra
-function usarLombra() {
-    const percentual = parseInt(document.getElementById('lombraInput').value);
-    const bonus = percentual.toString().split('').reduce((a, b) => a + parseInt(b), 0);
-    
-    if(personagem.lombra >= percentual) {
-        personagem.lombra -= percentual;
-        localStorage.setItem('pnjbr-personagem', JSON.stringify(personagem));
-        mostrarRolagem(`🎲 Bônus de Lombra: +${bonus}`);
-        atualizarInterface();
-    } else {
-        alert("Lombra insuficiente!");
-    }
-}
-
-// Sistema de Combate
-function atacar(arma) {
-    const [dados, faces] = arma.dano.split('d');
-    let total = 0;
-    
-    for(let i = 0; i < dados; i++) {
-        total += Math.floor(Math.random() * faces) + 1;
-    }
-    
-    total += personagem.atributos[arma.atributo];
-    mostrarRolagem(`⚔️ ${arma.nome}: ${total} de dano`);
-}
-
-// Interface
-function atualizarInterface() {
-    if(personagem.nome) {
-        document.getElementById('nome').value = personagem.nome;
-        document.getElementById('forca').value = personagem.atributos.forca;
-        document.getElementById('lombraAtual').textContent = personagem.lombra;
-        document.getElementById('lombraBarra').style.width = `${personagem.lombra}%`;
-    }
-}
-
-function mostrarRolagem(mensagem) {
-    const div = document.getElementById('rolagens');
-    div.innerHTML = `<div class="dice-result">${mensagem}</div>` + div.innerHTML;
-}
-
-// Inicialização
-function init() {
-    // Carregar armas
-    const divArmas = document.getElementById('armas');
-    armas.forEach(arma => {
-        divArmas.innerHTML += `
-            <div class="col-md-6 mb-3">
-                <div class="card bg-dark">
-                    <div class="card-body">
-                        <h5>${arma.nome}</h5>
-                        <button onclick="atacar(${JSON.stringify(arma)})" 
-                                class="btn btn-danger">
-                            Atacar (${arma.dano}+${arma.atributo})
-                        </button>
-                    </div>
-                </div>
+<body>
+    <div class="container">
+        <h1>Criação de Personagem</h1>
+        <div class="character-form">
+            <label>Nome: <input type="text" id="nome"></label>
+            <label>Força: <input type="number" id="forca" min="1" max="20"></label>
+            <label>Destreza: <input type="number" id="destreza" min="1" max="20"></label>
+            <label>Inteligência: <input type="number" id="inteligencia" min="1" max="20"></label>
+            <label>Carisma: <input type="number" id="carisma" min="1" max="20"></label>
+            <label>Couro (CA): <input type="number" id="couro" min="1" max="20"></label>
+            <label>Vida: <input type="number" id="vida" min="101" max="200"></label>
+            <label>Lombra: <input type="number" id="lombra" min="0" max="99"></label>
+            
+            <div class="image-upload">
+                <label>Upload da Imagem do Personagem:</label>
+                <input type="file" id="imagem-personagem" accept="image/*">
             </div>
-        `;
-    });
-
-    // Carregar dados salvos
-    if(Object.keys(personagem).length > 0) {
-        atualizarInterface();
-    }
-}
-
-init();
-</script>
+            
+            <button onclick="criarPersonagem()">Criar Personagem</button>
+        </div>
+        <h2>Armas Disponíveis</h2>
+        <div class="weapons">
+            <div class="weapon"><img src="porrete.png" alt="Porrete"><p>Porrete de Aço Fundido</p></div>
+            <div class="weapon"><img src="clava.png" alt="Clava"><p>Clava Espinhosa</p></div>
+            <div class="weapon"><img src="machado.png" alt="Machado"><p>Machado de Bombeiro</p></div>
+            <div class="weapon"><img src="bankai.png" alt="Espada Bankai"><p>Espada Bankai Longa</p></div>
+        </div>
+        <h2>Perícias</h2>
+        <div class="skills">
+            <label>Parrudão: <input type="number" id="parrudao" min="0" max="20"></label>
+            <label>Courudo: <input type="number" id="courudo" min="0" max="20"></label>
+            <label>Bógue: <input type="number" id="bogue" min="0" max="20"></label>
+            <label>Capela: <input type="number" id="capela" min="0" max="20"></label>
+            <label>Tisconde: <input type="number" id="tisconde" min="0" max="20"></label>
+            <label>Robalris: <input type="number" id="robalris" min="0" max="20"></label>
+            <label>Indagar: <input type="number" id="indagar" min="0" max="20"></label>
+            <label>Atinar: <input type="number" id="atinar" min="0" max="20"></label>
+            <label>Mexiricar: <input type="number" id="mexiricar" min="0" max="20"></label>
+            <label>Curar: <input type="number" id="curar" min="0" max="20"></label>
+            <label>Macumba: <input type="number" id="macumba" min="0" max="20"></label>
+            <label>Disdobro: <input type="number" id="disdobro" min="0" max="20"></label>
+            <label>Diplomacia: <input type="number" id="diplomacia" min="0" max="20"></label>
+            <label>Nó Cego: <input type="number" id="nocego" min="0" max="20"></label>
+            <label>Botar Pânico: <input type="number" id="botarpanico" min="0" max="20"></label>
+        </div>
+    </div>
 </body>
 </html>
